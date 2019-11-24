@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="space1">16dip</dimen>
+    <dimen name="space2">8dip</dimen>
+
+    <dimen name="text1">32dip</dimen>
+    <dimen name="text2">24dip</dimen>
+    <dimen name="text3">16dip</dimen>
+    <dimen name="text4">8dip</dimen>
+</resources>
