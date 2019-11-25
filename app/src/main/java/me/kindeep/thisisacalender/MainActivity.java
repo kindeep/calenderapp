@@ -17,8 +17,6 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -109,23 +107,26 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.delete_all:
                 data.deleteAll();
-                meetingsRecyclerList.getAdapter().notifyDataSetChanged();
                 break;
             case R.id.delete_today:
-                data.deleteDate(currentDateOnCalender);
-                meetingsRecyclerList.getAdapter().notifyDataSetChanged();
+                data.deleteMeetingsOnDate(currentDateOnCalender);
                 break;
             case R.id.postpone_today:
+                postponeSelectedDate();
                 break;
             default:
 
         }
+        meetingsRecyclerList.getAdapter().notifyDataSetChanged();
+
         return true;
     }
 
-
-    public void removeOptions(View v) {
-
+    public void postponeSelectedDate() {
+        for (Meeting meeting : data.getMeetingsOnDate(currentDateOnCalender)) {
+            meeting.postponeMeeting();
+            data.addOrUpdateMeeting(meeting);
+        }
     }
 
 

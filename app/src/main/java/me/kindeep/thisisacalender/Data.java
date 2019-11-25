@@ -22,16 +22,25 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.security.auth.callback.Callback;
+
 public class Data extends SQLiteOpenHelper {
     public static final int REQUEST_READ_CONTACTS = 1;
     public static final int DATABASE_VERSION = 2;
     public static final String DB_NAME = "calenderisthis";
     public static final String DB_TABLE = "meetings";
-    private static final String MEETING_ID = "meeting_id";
+    public static final String MEETING_ID = "meeting_id";
+    public static final String MEETING_START_DATE = "start_date";
+    public static final String MEETING_END_DATE = "end_date";
+    public static final String MEETING_TITLE = "title";
+    public static final String MEETING_CONTACT_ID = "contact_id";
     public static final int DB_VERSION = 1;
-    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE +
-            " (" + MEETING_ID +
-            " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title TEXT, start_date INTEGER, end_date INTEGER, contact_id TEXT);";
+    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (" +
+            MEETING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+            MEETING_TITLE + " TEXT, " +
+            MEETING_START_DATE + " INTEGER, " +
+            MEETING_END_DATE + " INTEGER, " +
+            MEETING_CONTACT_ID + " TEXT);";
 
 
     Data(Context context) {
@@ -59,10 +68,10 @@ public class Data extends SQLiteOpenHelper {
 
     // TODO: Would help to implement caching for this method
     List<Meeting> getMeetingList() {
-        String[] fields = new String[]{MEETING_ID, "title", "start_date", "end_date", "contact_id"};
+        String[] fields = new String[]{MEETING_ID, MEETING_TITLE, MEETING_START_DATE, MEETING_END_DATE, MEETING_CONTACT_ID};
         SQLiteDatabase datareader = getReadableDatabase();
         Cursor cursor = datareader.query(DB_TABLE, fields,
-                null, null, null, null, "start_date");
+                null, null, null, null, MEETING_START_DATE);
         cursor.moveToFirst();
         cursor.moveToNext();
 
@@ -86,10 +95,10 @@ public class Data extends SQLiteOpenHelper {
     void addOrUpdateMeeting(Meeting meeting) {
         SQLiteDatabase dataChanger = getWritableDatabase();
         ContentValues newMeeting = new ContentValues();
-        newMeeting.put("title", meeting.getTitle());
-        newMeeting.put("start_date", meeting.getStart().getTime());
-        newMeeting.put("end_date", meeting.getStart().getTime());
-        newMeeting.put("contact_id", meeting.getContactId());
+        newMeeting.put(MEETING_TITLE, meeting.getTitle());
+        newMeeting.put(MEETING_START_DATE, meeting.getStart().getTime());
+        newMeeting.put(MEETING_END_DATE, meeting.getStart().getTime());
+        newMeeting.put(MEETING_CONTACT_ID, meeting.getContactId());
 
         if (meeting.getMeetingId() == null) {
             dataChanger.insert(DB_TABLE, null, newMeeting);
@@ -114,8 +123,6 @@ public class Data extends SQLiteOpenHelper {
         }
 
         long time = date.getTime();
-//        int resultIndex = 0;
-//        long resultTime = time;
 
         for (int i = 0; i < meetings.size(); i++) {
             if (meetings.get(i).getStart().getTime() >= time) {
@@ -127,17 +134,26 @@ public class Data extends SQLiteOpenHelper {
     }
 
     public void deleteAll() {
-        for(Meeting meeting: getMeetingList()) {
+        for (Meeting meeting : getMeetingList()) {
             removeMeeting(meeting);
         }
     }
 
-    public void deleteDate(Date date) {
+    public void deleteMeetingsOnDate(Date date) {
+        for (Meeting meeting : getMeetingsOnDate(date)) {
+            removeMeeting(meeting);
+        }
+    }
+
+    public List<Meeting> getMeetingsOnDate(Date date) {
+        Log.e("DATA", "All on date input date " + date);
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
 
+        cal.set(Calendar.HOUR, -12);
+        Log.e("DATE", cal.getTime() + "" );
         cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
@@ -148,11 +164,15 @@ public class Data extends SQLiteOpenHelper {
 
         Date endDate = cal.getTime();
 
-        for(Meeting meeting: getMeetingList()) {
-            if(meeting.getStart().getTime() <= endDate.getTime() && meeting.getStart().getTime() >= startDate.getTime()) {
-                removeMeeting(meeting);
+        List<Meeting> result = new ArrayList<>();
+        for (Meeting meeting : getMeetingList()) {
+            if (meeting.getStart().getTime() <= endDate.getTime() && meeting.getStart().getTime() >= startDate.getTime()) {
+                result.add(meeting);
             }
         }
+
+        Log.e("DATA", "All on date between" + startDate + " and " + endDate + result);
+        return result;
     }
 
     public static Contact getContactById(Activity activity, String id) {

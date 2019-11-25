@@ -42,12 +42,7 @@
                 android:textColor="@color/textLight"
                 android:textSize="@dimen/text3" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="remove"
-                android:onClick="removeOptions"
-                />
+
 
         </LinearLayout>
 
