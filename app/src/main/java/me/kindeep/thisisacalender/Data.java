@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,9 +27,11 @@ public class Data extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 2;
     public static final String DB_NAME = "calenderisthis";
     public static final String DB_TABLE = "meetings";
+    private static final String MEETING_ID = "meeting_id";
     public static final int DB_VERSION = 1;
     private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE +
-            " (meeting_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title TEXT, start_date INTEGER, end_date INTEGER, contact_id TEXT);";
+            " (" + MEETING_ID +
+            " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title TEXT, start_date INTEGER, end_date INTEGER, contact_id TEXT);";
 
 
     Data(Context context) {
@@ -45,8 +48,18 @@ public class Data extends SQLiteOpenHelper {
         //How to migrate or reconstruct data from old version to new on upgrade
     }
 
+    Meeting getMeetingById(String meetingID) {
+        for (Meeting meeting : getMeetingList()) {
+            if (meeting.getMeetingId().equals(meetingID)) {
+                return meeting;
+            }
+        }
+        return null;
+    }
+
+    // TODO: Would help to implement caching for this method
     List<Meeting> getMeetingList() {
-        String[] fields = new String[]{"meeting_id", "title", "start_date", "end_date", "contact_id"};
+        String[] fields = new String[]{MEETING_ID, "title", "start_date", "end_date", "contact_id"};
         SQLiteDatabase datareader = getReadableDatabase();
         Cursor cursor = datareader.query(DB_TABLE, fields,
                 null, null, null, null, "start_date");
@@ -82,13 +95,64 @@ public class Data extends SQLiteOpenHelper {
             dataChanger.insert(DB_TABLE, null, newMeeting);
 
         } else {
+            Log.e("DATA", "MEETING ALREADY EXISTS, UPDATE");
             dataChanger.update(DB_TABLE, newMeeting, "meeting_id=" + meeting.getMeetingId(), null);
         }
         dataChanger.close();
     }
 
-    void removeMeeting(int meetingId) {
+    public void removeMeeting(Meeting name) {
+        SQLiteDatabase dataChanger = getWritableDatabase();
+        dataChanger.delete(DB_TABLE, MEETING_ID + "=?", new String[]{name.getMeetingId()});
+    }
 
+    // TODO: convert to a query?
+    public int getIndexForDate(Date date) {
+        List<Meeting> meetings = getMeetingList();
+        if (meetings.size() == 0) {
+            return 0;
+        }
+
+        long time = date.getTime();
+//        int resultIndex = 0;
+//        long resultTime = time;
+
+        for (int i = 0; i < meetings.size(); i++) {
+            if (meetings.get(i).getStart().getTime() >= time) {
+                Log.e("INDEX", i + "" + meetings.get(i).getStart().getTime() + " " + date.getTime());
+                return i;
+            }
+        }
+        return meetings.size() - 1;
+    }
+
+    public void deleteAll() {
+        for(Meeting meeting: getMeetingList()) {
+            removeMeeting(meeting);
+        }
+    }
+
+    public void deleteDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        Date startDate = cal.getTime();
+
+        // TODO: Check what happens when DATE is 23:33
+        cal.set(Calendar.DATE, cal.get(Calendar.DATE) + 1);
+
+        Date endDate = cal.getTime();
+
+        for(Meeting meeting: getMeetingList()) {
+            if(meeting.getStart().getTime() <= endDate.getTime() && meeting.getStart().getTime() >= startDate.getTime()) {
+                removeMeeting(meeting);
+            }
+        }
     }
 
     public static Contact getContactById(Activity activity, String id) {

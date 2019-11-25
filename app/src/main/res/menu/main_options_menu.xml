@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/delete_today"
+    android:title="Clear Today"
+    android:icon="@mipmap/ic_launcher"/>
+    <item android:id="@+id/delete_all"
+        android:title="Clear All "
+        android:icon="@mipmap/ic_launcher"/>
+    <item android:id="@+id/postpone_today"
+        android:title="Postpone Today"
+        android:icon="@mipmap/ic_launcher"/>
+</menu>

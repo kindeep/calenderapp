@@ -19,19 +19,17 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
 
 
 public class MeetingActivity extends AppCompatActivity {
 
-    Meeting meeting = new Meeting();
+    Meeting meeting;
     TextView startDate;
     TextView endDate;
     EditText titleEditText;
@@ -51,6 +49,34 @@ public class MeetingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meeting);
 
         data = new Data(this);
+
+        String meetingId = null;
+        Intent intent = getIntent();
+        Date meetingStartDate = new Date();
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                meetingId = extras.getString("meeting_id");
+
+                if (extras.containsKey("date")) {
+                    // Add Meeting intent
+                    setTitle(R.string.title_add_meeting_activity);
+                    meetingStartDate = new Date(extras.getLong("date"));
+                    meeting = new Meeting(meetingStartDate);
+                    findViewById(R.id.delete_meeting_btn).setVisibility(View.INVISIBLE);
+                } else {
+                    // Edit meeting intent
+                    setTitle(R.string.title_edit_meeting_activity);
+                    if (meetingId != null) {
+                        Meeting tempMeeting = data.getMeetingById(meetingId);
+                        if (tempMeeting != null) {
+                            meeting = tempMeeting;
+                        }
+                    }
+                }
+            }
+        }
+
 
         startDate = findViewById(R.id.startDate);
         endDate = findViewById(R.id.endDate);
@@ -77,6 +103,7 @@ public class MeetingActivity extends AppCompatActivity {
         editMeetingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                meeting.setTitle(titleEditText.getText().toString());
                 titleEditText.setEnabled(!titleEditText.isEnabled());
                 if (titleEditText.isEnabled()) {
                     titleEditText.requestFocus();
@@ -101,7 +128,9 @@ public class MeetingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 data.addOrUpdateMeeting(meeting);
+                Log.e("MEETINGS", "Add meeting: " + meeting);
                 Log.e("MEETINGS", data.getMeetingList().toString());
+                finishActivity(EDIT_MEETING);
                 finish();
             }
         });
@@ -110,8 +139,9 @@ public class MeetingActivity extends AppCompatActivity {
         updateContactViews();
     }
 
+    public static final int EDIT_MEETING = 235;
+
     void promptDate(final int type) {
-        Toast.makeText(this, "Set the goodym dyt", Toast.LENGTH_SHORT).show();
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this) {
             int yearOfCentury = 0;
@@ -132,7 +162,6 @@ public class MeetingActivity extends AppCompatActivity {
                     final int year = yearOfCentury;
                     final int month = monthOfDay;
                     final int day = dayOfMonth;
-                    Toast.makeText(MeetingActivity.this, "YESSS" + which, Toast.LENGTH_SHORT).show();
                     new TimePickerDialog(MeetingActivity.this, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minuteOfHOur) {
@@ -148,24 +177,31 @@ public class MeetingActivity extends AppCompatActivity {
                         }
                     }, 0, 0, true).show();
                 } else if (which == DialogInterface.BUTTON_NEGATIVE) {
-                    Toast.makeText(MeetingActivity.this, "BYEEEEE", Toast.LENGTH_SHORT).show();
                 }
                 updateMeetingViews();
             }
         };
+        Calendar cal = Calendar.getInstance();
+
+        if (type == SET_START) {
+            cal.setTime(meeting.getStart());
+        } else if (type == SET_END) {
+            cal.setTime(meeting.getEnd());
+        }
+        datePickerDialog.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
 
         datePickerDialog.show();
     }
 
     void updateMeetingViews() {
-        startDate.setText(meeting.getStart().toString());
-        endDate.setText(meeting.getEnd().toString());
+        startDate.setText("Start: " + meeting.getStart().toString());
+        endDate.setText("End: " + meeting.getEnd().toString());
         titleEditText.setText(meeting.getTitle());
     }
 
     void updateContactViews() {
         Contact contact = getContactById(this.meeting.getContactId());
-        if(contact != null) {
+        if (contact != null) {
             contactPhone.setText(contact.getPhone());
             contactName.setText(contact.getName());
         }
@@ -181,7 +217,6 @@ public class MeetingActivity extends AppCompatActivity {
         if (requestCode == PICK_CONTACT_REQUEST) {
             if (resultCode == RESULT_OK) { //User picked a contact; didn't cancel out
                 // The Intent's data Uri identifies which contact was selected.
-                Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show();
 
                 String[] projection = {
                         ContactsContract.CommonDataKinds.Phone.CONTACT_ID
@@ -203,6 +238,14 @@ public class MeetingActivity extends AppCompatActivity {
     }
 
     public void deleteMeeting(View v) {
-
+        data.removeMeeting(meeting);
+        finishActivity(EDIT_MEETING);
+        finish();
     }
+
+    public void cancelEditMeeting(View v) {
+        finishActivity(EDIT_MEETING);
+        finish();
+    }
+
 }

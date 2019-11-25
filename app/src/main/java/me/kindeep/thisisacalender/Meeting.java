@@ -2,6 +2,7 @@ package me.kindeep.thisisacalender;
 
 import androidx.annotation.NonNull;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Meeting {
@@ -13,6 +14,14 @@ public class Meeting {
 
     Meeting() {
         this(new Date(), new Date());
+    }
+
+    Meeting(Date start) {
+        this.start = start;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(start);
+        cal.add(Calendar.HOUR_OF_DAY, 1);
+        this.end = cal.getTime();
     }
 
     public String getTitle() {

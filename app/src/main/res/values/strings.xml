@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">This is a calender</string>
+    <string name="app_name">This is a Calender</string>
+    <string name="title_meeting_activity"> Meeting</string>
+    <string name="title_edit_meeting_activity">Edit Meeting</string>
+    <string name="title_add_meeting_activity">Add Meeting</string>
+    <string name="title_main_activity">This is a Calender</string>
+    <string name="title_mass_removal_activity">Remove</string>
 </resources>

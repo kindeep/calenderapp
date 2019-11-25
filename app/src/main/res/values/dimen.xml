@@ -2,9 +2,14 @@
 <resources>
     <dimen name="space1">16dip</dimen>
     <dimen name="space2">8dip</dimen>
+    <dimen name="space3">4dip</dimen>
+    <dimen name="space4">2dip</dimen>
 
     <dimen name="text1">32dip</dimen>
     <dimen name="text2">24dip</dimen>
-    <dimen name="text3">16dip</dimen>
-    <dimen name="text4">8dip</dimen>
+    <dimen name="text3">20dip</dimen>
+    <dimen name="text4">16dip</dimen>
+    <dimen name="text5">12dip</dimen>
+    <dimen name="text6">8dip</dimen>
+    <dimen name="text7">4dip</dimen>
 </resources>

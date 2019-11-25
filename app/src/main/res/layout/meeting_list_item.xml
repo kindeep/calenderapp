@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/space2"
+    android:layout_marginTop="@dimen/space3"
+    android:layout_marginRight="@dimen/space2"
+    android:layout_marginBottom="@dimen/space3"
+    android:background="@color/listItemBackground"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:padding="@dimen/space2">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/dates"
+        app:layout_constraintLeft_toLeftOf="parent"
+        >
+
+        <TextView
+            android:id="@+id/meeting_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textColor="@color/listItemText"
+            android:textSize="@dimen/text2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contact"
+            android:textColor="@color/listItemText"
+            android:textSize="@dimen/text4" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dates"
+        app:layout_constraintLeft_toRightOf="@id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/meeting_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="start"
+            android:textColor="@color/listItemText" />
+
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="-"-->
+<!--            android:gravity="center"/>-->
+
+        <TextView
+            android:id="@+id/meeting_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="end"
+            android:textColor="@color/listItemText" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
