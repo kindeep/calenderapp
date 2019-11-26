@@ -5,4 +5,6 @@
     <string name="title_add_meeting_activity">Add Meeting</string>
     <string name="title_main_activity">This is a Calender</string>
     <string name="title_mass_removal_activity">Remove</string>
+    <string name="title_edit">Edit</string>
+    <string name="title_edit_done">Done</string>
 </resources>

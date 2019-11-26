@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#ff6f00</color>
+    <color name="colorPrimaryDark">#c43e00</color>
+    <color name="colorPrimaryLight">#ffa040</color>
+    <color name="colorAccent">#c43e00</color>
     <color name="negative">#FF0000</color>
-    <color name="affirmative">#74F311</color>
+    <color name="affirmative">#6D9E1F</color>
+    <color name="listItemBackgroundDisable">#949494</color>
     <color name="textLight">#FFFFFF</color>
     <color name="textDark">#000000</color>
-    <color name="listItemBackground">#B2DFDB</color>
+    <color name="listItemBackground">#ffffff</color>
     <color name="listItemText">#000000</color>
+    <color name="listItemTitle">#0D47A1</color>
     <color name="grey1">#FFFFFF</color>
+    <color name="transperent">#00FFFFFF</color>
 </resources>

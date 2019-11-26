@@ -1,75 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:clickable="true"
+    android:elevation="@dimen/space1"
+    android:focusable="false"
+    android:onClick="setStartDate"
+    app:cardCornerRadius="8dip"
+    app:contentPadding="@dimen/space2"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:layout_constraintLeft_toRightOf="@id/start_text"
+    app:layout_constraintTop_toTopOf="parent"
     android:layout_marginLeft="@dimen/space2"
     android:layout_marginTop="@dimen/space3"
     android:layout_marginRight="@dimen/space2"
     android:layout_marginBottom="@dimen/space3"
-    android:background="@color/listItemBackground"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:padding="@dimen/space2">
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/dates"
-        app:layout_constraintLeft_toLeftOf="parent"
-        >
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/dates"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/meeting_title"
+            <TextView
+                android:id="@+id/meeting_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textColor="@color/listItemTitle"
+                android:textSize="@dimen/text2" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dates"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title"
-            android:textColor="@color/listItemText"
-            android:textSize="@dimen/text2" />
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/linearLayout"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contact"
-            android:textColor="@color/listItemText"
-            android:textSize="@dimen/text4" />
+            <TextView
+                android:id="@+id/meeting_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="start"
+                android:textColor="@color/listItemText" />
 
-    </LinearLayout>
+            <!--        <TextView-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:text="-"-->
+            <!--            android:gravity="center"/>-->
 
-    <LinearLayout
-        android:id="@+id/dates"
-        app:layout_constraintLeft_toRightOf="@id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/meeting_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="end"
+                android:textColor="@color/listItemText" />
 
-        <TextView
-            android:id="@+id/meeting_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="start"
-            android:textColor="@color/listItemText" />
-
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="-"-->
-<!--            android:gravity="center"/>-->
-
-        <TextView
-            android:id="@+id/meeting_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="end"
-            android:textColor="@color/listItemText" />
-
-    </LinearLayout>
+        </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -38,72 +38,218 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:layout_weight="0"
-                android:text="Edit" />
-        </LinearLayout>
+                android:text="Edit"
+                android:backgroundTint="@color/colorAccent"
 
-        <TextView
-            android:id="@+id/startDate"
+                />
+        </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
             android:layout_marginTop="@dimen/space1"
-            android:textSize="@dimen/text4"
-            android:text="90:90"
-            />
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:layout_height="wrap_content"
+                android:text="Start: "
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/start_text"
+                android:paddingRight="@dimen/space2"
+                />
+
+            <androidx.cardview.widget.CardView
+                app:layout_constraintLeft_toRightOf="@id/start_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:elevation="@dimen/space1"
+                app:contentPadding="@dimen/space2"
+                android:layout_gravity="center"
+                app:cardCornerRadius="8dip"
+                android:onClick="setStartDate"
+                >
+                <TextView
+                    android:id="@+id/startDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="90:90"
+                    android:textSize="@dimen/text4" />
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/space2"
+
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+
+        android:text="End: "
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/end_text"
+        android:paddingRight="@dimen/space2"
+        />
+
+    <androidx.cardview.widget.CardView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/end_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:elevation="@dimen/space1"
+        app:contentPadding="@dimen/space2"
+        android:layout_gravity="center"
+        app:cardCornerRadius="8dip"
+        android:onClick="setEndDate"
+        >
 
         <TextView
             android:id="@+id/endDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:layout_marginTop="@dimen/space2"
-            android:textSize="@dimen/text4"
             android:text="90:90"
-            android:clickable="true" />
+            android:textSize="@dimen/text4" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contact"
-            android:textSize="@dimen/text2"
-            android:layout_marginTop="@dimen/space1"/>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space2"
-
+            android:weightSum="1"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:id="@+id/contact_constraint"
+            android:layout_marginTop="@dimen/space1"
+            >
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="top"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:onClick="a"
+                android:text="Contact"
+                android:textSize="@dimen/text2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
-                <TextView
-                    android:id="@+id/meeting_contact_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="None"
-                    android:textSize="@dimen/text4" />
-
-                <TextView
-                    android:id="@+id/meeting_contact_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/edit_contact_btn"
+            <ImageButton
+                android:id="@+id/add_contact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="Edit" />
-        </LinearLayout>
+                android:onClick="pickContactIntent"
+                android:src="@drawable/ic_add_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:backgroundTint="@color/colorAccent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/contact_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="openContact"
+            android:clickable="true"
+            android:focusable="false"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:elevation="@dimen/space1"
+            app:contentPaddingBottom="@dimen/space2"
+            app:contentPaddingLeft="@dimen/space2"
+            app:contentPaddingRight="@dimen/space2"
+            android:layout_gravity="center"
+            app:cardCornerRadius="8dip"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="top"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space2"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    >
+
+                    <TextView
+                        android:id="@+id/meeting_contact_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="None"
+                        android:textSize="@dimen/text4" />
+
+                    <TextView
+                        android:id="@+id/meeting_contact_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+                </LinearLayout>
+
+                <ImageButton
+                    app:layout_constraintRight_toLeftOf="@id/delete_contact_btn"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/edit_contact_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:layout_weight="0"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:onClick="pickContactIntent"
+                    android:src="@drawable/ic_edit_white_24dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="Edit" />
+
+                <ImageButton
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/delete_contact_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:layout_weight="0"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:onClick="deleteContact"
+                    android:src="@drawable/ic_delete_black_24dp"
+                    android:backgroundTint="@color/colorAccent"
+
+                    android:text="Edit" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

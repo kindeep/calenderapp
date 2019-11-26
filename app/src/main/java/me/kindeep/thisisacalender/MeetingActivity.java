@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -37,6 +39,8 @@ public class MeetingActivity extends AppCompatActivity {
     TextView contactPhone;
     Button doneBtn;
     Data data;
+
+    public static final int EDIT_MEETING = 235;
 
     static final int SET_START = 1;
     static final int SET_END = 2;
@@ -61,6 +65,7 @@ public class MeetingActivity extends AppCompatActivity {
                     // Add Meeting intent
                     setTitle(R.string.title_add_meeting_activity);
                     meetingStartDate = new Date(extras.getLong("date"));
+                    Log.e("START", meetingStartDate + "");
                     meeting = new Meeting(meetingStartDate);
                     findViewById(R.id.delete_meeting_btn).setVisibility(View.INVISIBLE);
                 } else {
@@ -85,20 +90,6 @@ public class MeetingActivity extends AppCompatActivity {
         contactPhone = findViewById(R.id.meeting_contact_number);
         doneBtn = findViewById(R.id.done_btn);
 
-        startDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                promptDate(SET_START);
-            }
-        });
-
-        endDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                promptDate(SET_END);
-            }
-        });
-
         editMeetingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,21 +98,15 @@ public class MeetingActivity extends AppCompatActivity {
                 if (titleEditText.isEnabled()) {
                     titleEditText.requestFocus();
                     titleEditText.setFocusableInTouchMode(true);
-
+                    editMeetingBtn.setText(R.string.title_edit_done);
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.showSoftInput(titleEditText, InputMethodManager.SHOW_FORCED);
+                } else {
+                    editMeetingBtn.setText(R.string.title_edit);
                 }
             }
         });
 
-        findViewById(R.id.edit_contact_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent pickContactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-                startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
-            }
-        });
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +123,37 @@ public class MeetingActivity extends AppCompatActivity {
         updateContactViews();
     }
 
-    public static final int EDIT_MEETING = 235;
+    public void setEndDate(View v) {
+       promptDate(SET_END);
+    }
+
+    public void setStartDate(View v) {
+        promptDate(SET_START);
+    }
+
+
+    public void pickContactIntent(View v) {
+        Intent pickContactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+        startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
+    }
+
+    public void openContact(View v) {
+        // Open contact using the default contacts viewer
+        if (meeting.getContactId() != null) {
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(meeting.getContactId()));
+                intent.setData(uri);
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(this, "Something went wrong with opening the contact.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "No contact associated with event!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     /**
      * Displays dialogs to select date and time, meeting is updated with the selected date/time
@@ -198,8 +213,8 @@ public class MeetingActivity extends AppCompatActivity {
     }
 
     void updateMeetingViews() {
-        startDate.setText("Start: " + meeting.getStart().toString());
-        endDate.setText("End: " + meeting.getEnd().toString());
+        startDate.setText(meeting.getStart().toString());
+        endDate.setText(meeting.getEnd().toString());
         titleEditText.setText(meeting.getTitle());
     }
 
@@ -211,6 +226,20 @@ public class MeetingActivity extends AppCompatActivity {
                 contactName.setText(contact.getName());
             }
         }
+
+        if (meeting.getContactId() == null) {
+            findViewById(R.id.add_contact).setVisibility(View.VISIBLE);
+            findViewById(R.id.contact_parent).setVisibility(View.INVISIBLE);
+        } else {
+            findViewById(R.id.add_contact).setVisibility(View.INVISIBLE);
+            findViewById(R.id.contact_parent).setVisibility(View.VISIBLE);
+
+        }
+    }
+
+    public void deleteContact(View v) {
+        meeting.setContactId(null);
+        updateContactViews();
     }
 
     @Override
@@ -232,7 +261,7 @@ public class MeetingActivity extends AppCompatActivity {
                     cursor.moveToFirst();
                     String id = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
                     this.meeting.setContactId(id);
-                }catch (NullPointerException e) {
+                } catch (NullPointerException e) {
                     Log.e("PICK_CONTACT_REQUEST", "Error with picking");
                 }
             }

@@ -96,7 +96,7 @@ public class Data extends SQLiteOpenHelper {
         ContentValues newMeeting = new ContentValues();
         newMeeting.put(MEETING_TITLE, meeting.getTitle());
         newMeeting.put(MEETING_START_DATE, meeting.getStart().getTime());
-        newMeeting.put(MEETING_END_DATE, meeting.getStart().getTime());
+        newMeeting.put(MEETING_END_DATE, meeting.getEnd().getTime());
         newMeeting.put(MEETING_CONTACT_ID, meeting.getContactId());
 
         if (meeting.getMeetingId() == null) {
@@ -151,25 +151,34 @@ public class Data extends SQLiteOpenHelper {
         }
     }
 
+    public static Date justGetDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        return cal.getTime();
+    }
+
     /**
      *
      * @param date
      * @return
      */
     public List<Meeting> getMeetingsOnDate(Date date) {
+        Log.e("POSTPONE", date + "");
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-
-        cal.set(Calendar.HOUR, -12);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+        cal.setTime(justGetDate(date));
 
         Date startDate = cal.getTime();
 
-        cal.set(Calendar.DATE, cal.get(Calendar.DATE) + 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + 1);
 
         Date endDate = cal.getTime();
+        Log.e("POSTPONE", startDate + " to " + endDate);
 
         List<Meeting> result = new ArrayList<>();
         for (Meeting meeting : getMeetingList()) {

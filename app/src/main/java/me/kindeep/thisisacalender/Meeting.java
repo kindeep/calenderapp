@@ -1,5 +1,7 @@
 package me.kindeep.thisisacalender;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.util.Calendar;
@@ -114,7 +116,7 @@ public class Meeting {
         }
 
         cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + addToDay);
-
+        Log.e("POSTPONE", cal.getTime() + "");
         return cal.getTime();
     }
 }

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     Data data;
     CalendarView calender;
     TextView currDate;
-    Date currentDateOnCalender = new Date();
+    private Date currentDateOnCalender = new Date();
     MeetingsAdapter meetingsAdapter;
     DoubleLayoutManager layoutManager;
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent addMeetingIntent = new Intent(MainActivity.this, MeetingActivity.class);
+                Log.e("START", "Curr date on cal "+ currentDateOnCalender + "");
                 addMeetingIntent.putExtra("date", currentDateOnCalender.getTime());
                 startActivityForResult(addMeetingIntent, MeetingActivity.EDIT_MEETING);
             }
@@ -66,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
                 if (firstPos >= 0) {
                     Date startDate = data.getMeetingList().get(firstPos).getStart();
                     calender.setDate(startDate.getTime());
+                    updateStoredDateOnCalender(startDate);
                     setCalenderListTime(startDate);
                 }
+
             }
         });
 
@@ -87,9 +91,13 @@ public class MainActivity extends AppCompatActivity {
                 layoutManager.scrollToPositionWithOffset(scrollToIndex, 0);
                 setCalenderListTime(date);
                 currDate.setText(DateFormat.getDateInstance(DateFormat.FULL).format(date));
-                currentDateOnCalender = date;
+                updateStoredDateOnCalender(date);
             }
         });
+    }
+
+    public void updateStoredDateOnCalender(Date date) {
+        currentDateOnCalender = Data.justGetDate(date);
     }
 
     @Override
@@ -119,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void postponeSelectedDate() {
+        Log.e("POSTPONE", data.getMeetingsOnDate(currentDateOnCalender) + "");
         for (Meeting meeting : data.getMeetingsOnDate(currentDateOnCalender)) {
             meeting.postponeMeeting();
             data.addOrUpdateMeeting(meeting);
