@@ -34,7 +34,6 @@ public class Data extends SQLiteOpenHelper {
     public static final String MEETING_END_DATE = "end_date";
     public static final String MEETING_TITLE = "title";
     public static final String MEETING_CONTACT_ID = "contact_id";
-    public static final int DB_VERSION = 1;
     private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (" +
             MEETING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             MEETING_TITLE + " TEXT, " +
@@ -105,7 +104,7 @@ public class Data extends SQLiteOpenHelper {
 
         } else {
             Log.e("DATA", "MEETING ALREADY EXISTS, UPDATE");
-            dataChanger.update(DB_TABLE, newMeeting, "meeting_id=" + meeting.getMeetingId(), null);
+            dataChanger.update(DB_TABLE, newMeeting, MEETING_ID + "=" + meeting.getMeetingId(), null);
         }
         dataChanger.close();
     }
@@ -126,40 +125,48 @@ public class Data extends SQLiteOpenHelper {
 
         for (int i = 0; i < meetings.size(); i++) {
             if (meetings.get(i).getStart().getTime() >= time) {
-                Log.e("INDEX", i + "" + meetings.get(i).getStart().getTime() + " " + date.getTime());
                 return i;
             }
         }
         return meetings.size() - 1;
     }
 
+    /**
+     * Deletes all stored meetings
+     */
     public void deleteAll() {
         for (Meeting meeting : getMeetingList()) {
             removeMeeting(meeting);
         }
     }
 
+    /**
+     * Delete all meetings on the day of the provided date
+     *
+     * @param date
+     */
     public void deleteMeetingsOnDate(Date date) {
         for (Meeting meeting : getMeetingsOnDate(date)) {
             removeMeeting(meeting);
         }
     }
 
+    /**
+     *
+     * @param date
+     * @return
+     */
     public List<Meeting> getMeetingsOnDate(Date date) {
-        Log.e("DATA", "All on date input date " + date);
-
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
 
         cal.set(Calendar.HOUR, -12);
-        Log.e("DATE", cal.getTime() + "" );
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
         Date startDate = cal.getTime();
 
-        // TODO: Check what happens when DATE is 23:33
         cal.set(Calendar.DATE, cal.get(Calendar.DATE) + 1);
 
         Date endDate = cal.getTime();
@@ -171,10 +178,20 @@ public class Data extends SQLiteOpenHelper {
             }
         }
 
-        Log.e("DATA", "All on date between" + startDate + " and " + endDate + result);
         return result;
     }
 
+    /**
+     * Tries to find a contact with the provided id stored in the phone's contacts, prompts for
+     * permission if it does not already have permission to access contacts.
+     *
+     * In case it does not have permission at time of calling, returns null.
+     *
+     * Also returns null if nothing found.
+     * @param activity
+     * @param id
+     * @return
+     */
     public static Contact getContactById(Activity activity, String id) {
         try {
             Context context = activity.getApplicationContext();
@@ -182,6 +199,7 @@ public class Data extends SQLiteOpenHelper {
             if (ContextCompat.checkSelfPermission(context,
                     Manifest.permission.READ_CONTACTS)
                     == PackageManager.PERMISSION_GRANTED) {
+                // Has permissions.
 
                 String[] needed = {
                         ContactsContract.CommonDataKinds.Phone.NUMBER,
@@ -210,8 +228,8 @@ public class Data extends SQLiteOpenHelper {
                         new String[]{Manifest.permission.READ_CONTACTS},
                         REQUEST_READ_CONTACTS
                 );
+                return null;
             }
-            return new Contact("null", "null", "null");
         } catch (Exception e) {
             Log.e("DATA", e.getStackTrace().toString());
             return null;

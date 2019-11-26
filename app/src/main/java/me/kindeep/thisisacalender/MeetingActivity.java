@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 
-
 public class MeetingActivity extends AppCompatActivity {
 
     Meeting meeting;
@@ -141,6 +140,12 @@ public class MeetingActivity extends AppCompatActivity {
 
     public static final int EDIT_MEETING = 235;
 
+    /**
+     * Displays dialogs to select date and time, meeting is updated with the selected date/time
+     *
+     * @param type SET_START - Set meeting start time
+     *             SET_END - Set meeting end time
+     */
     void promptDate(final int type) {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this) {
@@ -168,7 +173,6 @@ public class MeetingActivity extends AppCompatActivity {
                             Calendar cal = new GregorianCalendar(year, month, day, hourOfDay, minuteOfHOur);
 
                             Date date = new Date(cal.getTimeInMillis());
-                            Log.e("DATE", "Set date to : " + Arrays.asList(year, month, day, hourOfDay, minuteOfHOur));
                             if (type == SET_START)
                                 meeting.setStart(date);
                             if (type == SET_END)
@@ -200,19 +204,18 @@ public class MeetingActivity extends AppCompatActivity {
     }
 
     void updateContactViews() {
-        Contact contact = getContactById(this.meeting.getContactId());
-        if (contact != null) {
-            contactPhone.setText(contact.getPhone());
-            contactName.setText(contact.getName());
+        if (this.meeting.getContactId() != null) {
+            Contact contact = Data.getContactById(MeetingActivity.this, this.meeting.getContactId());
+            if (contact != null) {
+                contactPhone.setText(contact.getPhone());
+                contactName.setText(contact.getName());
+            }
         }
-    }
-
-    public Contact getContactById(String id) {
-        return Data.getContactById(MeetingActivity.this, id);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         // Check which request we're responding to
         if (requestCode == PICK_CONTACT_REQUEST) {
             if (resultCode == RESULT_OK) { //User picked a contact; didn't cancel out
@@ -225,13 +228,13 @@ public class MeetingActivity extends AppCompatActivity {
                 Cursor cursor = getContentResolver().query(data.getData(), projection,
                         null, null, null);
 
-                Log.e("CONTACTS", "All rows: " + Arrays.asList(cursor.getColumnNames()));
-
-                cursor.moveToFirst();
-
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-                this.meeting.setContactId(id);
-            } else {
+                try {
+                    cursor.moveToFirst();
+                    String id = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+                    this.meeting.setContactId(id);
+                }catch (NullPointerException e) {
+                    Log.e("PICK_CONTACT_REQUEST", "Error with picking");
+                }
             }
             updateContactViews();
         }

@@ -20,12 +20,6 @@ public class DoubleLayoutManager extends LinearLayoutManager {
     }
 
     @Override
-    public void onScrollStateChanged(int state) {
-        super.onScrollStateChanged(state);
-        Log.e("SCROLL", "Scroooo");
-    }
-
-    @Override
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
         if (pendingTargetPos != -1 && state.getItemCount() > 0) {
             scrollToPositionWithOffset(pendingTargetPos, pendingPosOffset);
