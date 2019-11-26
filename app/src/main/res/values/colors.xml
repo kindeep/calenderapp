@@ -14,4 +14,5 @@
     <color name="listItemTitle">#0D47A1</color>
     <color name="grey1">#FFFFFF</color>
     <color name="transperent">#00FFFFFF</color>
+    <color name="buttonText">#ffffff</color>
 </resources>

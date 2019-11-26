@@ -47,6 +47,7 @@
                     android:id="@+id/edit_meeting_title_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/buttonText"
                     android:layout_gravity="top"
                     android:layout_weight="0"
                     android:backgroundTint="@color/colorAccent"
@@ -76,6 +77,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.cardview.widget.CardView
+                        android:layout_margin="2dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -120,6 +122,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.cardview.widget.CardView
+                        android:layout_margin="2dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -297,6 +300,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorAccent"
+            android:textColor="@color/buttonText"
             android:onClick="cancelEditMeeting"
             android:text="Cancel"
             app:layout_constraintBottom_toBottomOf="parent"

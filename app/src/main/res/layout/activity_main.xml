@@ -37,11 +37,12 @@
                 android:id="@+id/curr_date_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/buttonText"
+                android:textStyle="bold"
                 android:layout_weight="1"
                 android:padding="@dimen/space2"
                 android:text="Date"
-                android:textColor="@color/textDark"
-                android:textSize="@dimen/text3" />
+                android:textSize="@dimen/text4" />
 
 
 

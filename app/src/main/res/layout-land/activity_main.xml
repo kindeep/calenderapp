@@ -28,9 +28,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
+            android:textStyle="bold"
             android:padding="@dimen/space2"
             android:text="Date"
-            android:textColor="@color/textDark"
+            android:textColor="@color/buttonText"
             android:textSize="@dimen/text3" />
     </LinearLayout>
 

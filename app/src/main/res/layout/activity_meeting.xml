@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:layout_weight="0"
+                android:textColor="@color/buttonText"
                 android:text="Edit"
                 android:backgroundTint="@color/colorAccent"
 
@@ -53,6 +54,7 @@
                 android:textColor="@color/colorAccent"
                 android:layout_height="wrap_content"
                 android:text="Start: "
+                android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -61,6 +63,7 @@
                 />
 
             <androidx.cardview.widget.CardView
+                android:layout_margin="2dp"
                 app:layout_constraintLeft_toRightOf="@id/start_text"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -96,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorAccent"
-
+        android:textStyle="bold"
         android:text="End: "
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -106,6 +109,7 @@
         />
 
     <androidx.cardview.widget.CardView
+        android:layout_margin="2dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/end_text"
@@ -163,6 +167,7 @@
                 android:src="@drawable/ic_add_black_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/buttonText"
                 android:backgroundTint="@color/colorAccent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -284,6 +289,7 @@
             android:id="@+id/cancel_edit_meeting_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/buttonText"
             android:onClick="cancelEditMeeting"
             android:text="Cancel"
             android:backgroundTint="@color/colorAccent"
