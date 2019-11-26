@@ -10,19 +10,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.ContactsContract;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-
-import javax.security.auth.callback.Callback;
+import java.util.Set;
 
 public class Data extends SQLiteOpenHelper {
     public static final int REQUEST_READ_CONTACTS = 1;
@@ -65,7 +62,6 @@ public class Data extends SQLiteOpenHelper {
         return null;
     }
 
-    // TODO: Would help to implement caching for this method
     List<Meeting> getMeetingList() {
         String[] fields = new String[]{MEETING_ID, MEETING_TITLE, MEETING_START_DATE, MEETING_END_DATE, MEETING_CONTACT_ID};
         SQLiteDatabase datareader = getReadableDatabase();
@@ -91,6 +87,23 @@ public class Data extends SQLiteOpenHelper {
         return result;
     }
 
+    List<Meeting> getMeetingsWithContact() {
+        List<Meeting> result = new ArrayList<>();
+
+        Set<String> set = new HashSet<>();
+
+        for (Meeting meeting : getMeetingList()) {
+            if (meeting.getContactId() != null) {
+                if(!set.contains(meeting.getContactId())) {
+                    result.add(meeting);
+                    set.add(meeting.getContactId());
+                }
+            }
+        }
+
+        return result;
+    }
+
     void addOrUpdateMeeting(Meeting meeting) {
         SQLiteDatabase dataChanger = getWritableDatabase();
         ContentValues newMeeting = new ContentValues();
@@ -109,9 +122,20 @@ public class Data extends SQLiteOpenHelper {
         dataChanger.close();
     }
 
-    public void removeMeeting(Meeting name) {
+    public void deleteMeeting(Meeting name) {
         SQLiteDatabase dataChanger = getWritableDatabase();
         dataChanger.delete(DB_TABLE, MEETING_ID + "=?", new String[]{name.getMeetingId()});
+    }
+
+    public void removeContact(Contact contact) {
+        for(Meeting meeting: getMeetingList()) {
+            if(meeting.getContactId() != null) {
+                if(meeting.getContactId().equals(contact.getContactId())) {
+                    meeting.setContactId(null);
+                    addOrUpdateMeeting(meeting);
+                }
+            }
+        }
     }
 
     // TODO: convert to a query?
@@ -136,7 +160,7 @@ public class Data extends SQLiteOpenHelper {
      */
     public void deleteAll() {
         for (Meeting meeting : getMeetingList()) {
-            removeMeeting(meeting);
+            deleteMeeting(meeting);
         }
     }
 
@@ -147,7 +171,7 @@ public class Data extends SQLiteOpenHelper {
      */
     public void deleteMeetingsOnDate(Date date) {
         for (Meeting meeting : getMeetingsOnDate(date)) {
-            removeMeeting(meeting);
+            deleteMeeting(meeting);
         }
     }
 
@@ -164,7 +188,6 @@ public class Data extends SQLiteOpenHelper {
     }
 
     /**
-     *
      * @param date
      * @return
      */
@@ -193,10 +216,11 @@ public class Data extends SQLiteOpenHelper {
     /**
      * Tries to find a contact with the provided id stored in the phone's contacts, prompts for
      * permission if it does not already have permission to access contacts.
-     *
+     * <p>
      * In case it does not have permission at time of calling, returns null.
-     *
+     * <p>
      * Also returns null if nothing found.
+     *
      * @param activity
      * @param id
      * @return

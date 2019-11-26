@@ -4,10 +4,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Meeting {
+public class Meeting implements Serializable {
     private String meetingId;
     private Date start;
     private Date end;

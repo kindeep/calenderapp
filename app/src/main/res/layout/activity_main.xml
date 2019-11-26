@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/colorPrimaryLight"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -28,7 +29,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimaryDark"
             android:orientation="horizontal"
             android:weightSum="1">
 
@@ -37,9 +38,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="@dimen/space3"
+                android:padding="@dimen/space2"
                 android:text="Date"
-                android:textColor="@color/textLight"
+                android:textColor="@color/textDark"
                 android:textSize="@dimen/text3" />
 
 

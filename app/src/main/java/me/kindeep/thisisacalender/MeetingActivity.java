@@ -1,6 +1,7 @@
 package me.kindeep.thisisacalender;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +24,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.util.Arrays;
+import java.io.ObjectInputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -47,10 +49,24 @@ public class MeetingActivity extends AppCompatActivity {
     static final int PICK_CONTACT_REQUEST = 3;
 
     @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        meeting = (Meeting) savedInstanceState.getSerializable("meeting");
+        super.onRestoreInstanceState(savedInstanceState);
+        updateMeetingViews();
+        updateContactViews();
+    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("meeting", meeting);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting);
-
         data = new Data(this);
 
         String meetingId = null;
@@ -124,7 +140,7 @@ public class MeetingActivity extends AppCompatActivity {
     }
 
     public void setEndDate(View v) {
-       promptDate(SET_END);
+        promptDate(SET_END);
     }
 
     public void setStartDate(View v) {
@@ -270,7 +286,7 @@ public class MeetingActivity extends AppCompatActivity {
     }
 
     public void deleteMeeting(View v) {
-        data.removeMeeting(meeting);
+        data.deleteMeeting(meeting);
         finishActivity(EDIT_MEETING);
         finish();
     }

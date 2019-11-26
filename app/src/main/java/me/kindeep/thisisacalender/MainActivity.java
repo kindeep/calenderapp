@@ -119,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.postpone_today:
                 postponeSelectedDate();
                 break;
+            case R.id.manage_contacts:
+                startActivity(new Intent(MainActivity.this, ContactsActivity.class));
             default:
 
         }

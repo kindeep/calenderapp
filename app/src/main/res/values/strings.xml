@@ -7,4 +7,5 @@
     <string name="title_mass_removal_activity">Remove</string>
     <string name="title_edit">Edit</string>
     <string name="title_edit_done">Done</string>
+    <string name="title_contacts_activity">Manage Contacts</string>
 </resources>

@@ -148,7 +148,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:layout_weight="1"
-                android:onClick="a"
                 android:text="Contact"
                 android:textSize="@dimen/text2"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -287,6 +286,7 @@
             android:layout_height="wrap_content"
             android:onClick="cancelEditMeeting"
             android:text="Cancel"
+            android:backgroundTint="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -9,4 +9,7 @@
     <item android:id="@+id/delete_all"
         android:title="Clear All "
         android:icon="@mipmap/ic_launcher"/>
+    <item android:id="@+id/manage_contacts"
+        android:title="Manage Contacts"
+        android:icon="@mipmap/ic_launcher"/>
 </menu>
