@@ -20,44 +20,25 @@
     app:layout_constraintLeft_toRightOf="@id/start_text"
     app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:id="@+id/dates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/dates"
-            app:layout_constraintTop_toTopOf="parent">
+            >
 
             <TextView
                 android:id="@+id/meeting_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Title"
                 android:textColor="@color/listItemTitle"
                 android:textSize="@dimen/text2" />
 
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/dates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/linearLayout"
-            app:layout_constraintTop_toTopOf="parent">
-
             <TextView
                 android:id="@+id/meeting_start"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="start"
                 android:textColor="@color/listItemText" />
@@ -70,13 +51,11 @@
 
             <TextView
                 android:id="@+id/meeting_end"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="end"
                 android:textColor="@color/listItemText" />
 
         </LinearLayout>
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
