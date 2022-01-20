@@ -1,5 +1,7 @@
 # Calender App
 
+Calender, not Calendar. Totally not misspelled.
+
 A simple calender app for android. Uses Android's SQLite database for storage.
 
 ![Screenshot1](https://imgur.com/E1Z9pko.png)
